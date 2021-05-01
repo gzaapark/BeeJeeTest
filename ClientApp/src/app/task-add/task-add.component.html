@@ -1,0 +1,25 @@
+<form [formGroup]="TaskForm" (submit)="onSubmit()">
+  <div class="form-group">
+    <label>Текст задачи</label>
+    <textarea class="form-control" rows="10" formControlName="text"></textarea>
+    <code *ngIf="isControlInvalid('text')">Обязательное поле</code>
+  </div>
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" formControlName="email" class="form-control">
+    <code *ngIf="isControlInvalid('email')">Обязательное поле</code>
+  </div>
+  <div class="form-group">
+    <label>Имя пользователя</label>
+    <input type="text" formControlName="username" class="form-control">
+    <code *ngIf="isControlInvalid('username')">Обязательное поле</code>
+  </div>
+  <div class="text-right">
+    <button type="submit" class="btn btn-dark">Сохранить</button>
+    <button class="btn btn-light" (click)="cancel()">Отмена</button>
+  </div>
+</form>
+
+<div class="text-center">
+  <code *ngIf="Error">{{ Error | json }}</code>
+</div>

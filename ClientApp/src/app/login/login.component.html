@@ -1,0 +1,22 @@
+<div class="panel panel-default col-md-3">
+  <div class="panel-body">
+    <form [formGroup]="LoginForm" (submit)="onSubmit()">
+      <div class="form-group">
+        <label>Логин</label>
+        <input type="text" class="form-control" formControlName="login">
+        <code *ngIf="isControlInvalid('login')">Обязательное поле</code>
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" class="form-control" formControlName="password">
+        <code *ngIf="isControlInvalid('password')">Обязательное поле</code>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-dark" type="submit">Войти</button>
+      </div>
+      <div class="text-center">
+        <code *ngIf="Error">{{ Error | json }}</code>
+      </div>
+    </form>
+  </div>
+</div>
