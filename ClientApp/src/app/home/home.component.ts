@@ -11,7 +11,8 @@ export class HomeComponent implements OnInit {
   constructor(private state: StateService, private router: Router) { }
 
   ngOnInit() {
-    this.router.navigate(['/task-list', this.state.TaskList.Page, this.state.TaskList.SortField, this.state.TaskList.SortDirection]);
+    const s = this.state.GetTaskListState();
+    this.router.navigate(['/task-list', s.Page, s.SortField, s.SortDirection]);
   }
 
 }

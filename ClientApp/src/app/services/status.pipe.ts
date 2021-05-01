@@ -6,10 +6,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class StatusPipe implements PipeTransform {
 
   transform(value: any, ...args: any[]): any {
-    if (value === 10 || value === 11)
-      return `Выполнено (${value})`;
+    if (value == 1)
+      return 'отредактирована администратором';
+    else if (value == 10)
+      return 'выполнена';
+    else if (value == 11)
+      return 'выполнена, отредактирована администратором';
     else
-      return `В работе (${value})`;;
+      return 'не выполнена';
   }
 
 }

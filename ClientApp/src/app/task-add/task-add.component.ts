@@ -63,6 +63,7 @@ export class TaskAddComponent implements OnInit {
       data => {
         if (data.status === 'ok') {
           this._state.CreatedTaskId = data.message.id;
+          this._state.SetTaskListState(1, 'id', 'desc');
           this._router.navigate(['/']);
         }
         else this.Error = data.message;

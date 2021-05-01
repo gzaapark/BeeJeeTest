@@ -70,6 +70,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
   Pagination: number[];
   PaginationPrevious: number;
   PaginationNext: number;
+  PaginationLast: number;
+  PaginationFirst: number;
 
   generatePagination() {
     const allPages = Math.ceil(this.TaskListCount / 3);
@@ -78,7 +80,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     var last = 10;
     for (let i = 0; i < allPages; i += 10) {
       first = i + 1;
-      last = i + 10;
+      last = Math.min(i + 10, allPages);
       if (currentPage >= first && currentPage <= last)
         break;
     }
@@ -88,10 +90,12 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.Pagination = pagination;
     this.PaginationPrevious = first > 1 ? first - 1 : undefined;
     this.PaginationNext = last < allPages ? last + 1 : undefined;
+    this.PaginationLast = last < allPages ? allPages : undefined;
+    this.PaginationFirst = first > 1 ? 1 : undefined;
   }
 
   fieldSort(field, direction) {
-    this._state.TaskListReset(this.Page, field, direction);
+    this._state.SetTaskListState(this.Page, field, direction);
     this._router.navigate(['/task-list', this.Page, field, direction]);
   }
 
@@ -100,12 +104,12 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   rePage(p) {
-    this._state.TaskListReset(p, this.SortField, this.SortDirection);
+    this._state.SetTaskListState(p, this.SortField, this.SortDirection);
     this._router.navigate(['/task-list', p, this.SortField, this.SortDirection]);
   }
 
   editTask(task) {
-    this._state.EditableTask = task;
+    this._state.SetTaskEditState(task);
     this._router.navigate(['/task-edit'])
   }
 

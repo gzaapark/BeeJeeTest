@@ -23,7 +23,7 @@ export class TaskEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const editableTask = this._state.EditableTask;
+    const editableTask = this._state.GetTaskEditState();
     const id = editableTask ? editableTask.id : undefined;
     const text = editableTask ? editableTask.text : undefined;
     const executed = editableTask && (editableTask.status === 10 || editableTask.status === 11);
@@ -53,7 +53,7 @@ export class TaskEditComponent implements OnInit {
 
   onSubmit() {
     const controls = this.TaskForm.controls;
-    const editableTask = this._state.EditableTask;
+    const editableTask = this._state.GetTaskEditState();
 
     if (this.TaskForm.invalid) {
       Object.keys(controls)
@@ -82,7 +82,7 @@ export class TaskEditComponent implements OnInit {
       data => {
         if (data.status === 'ok') {
           this._state.UpdatedTaskId = editableTask.id;
-          this._state.EditableTask = undefined;
+          this._state.SetTaskEditState(undefined);
           this.router.navigate(['/']);
         }
         else this.Error = data.message;

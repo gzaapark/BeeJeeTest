@@ -54,6 +54,9 @@
 </div>
 <div *ngIf="Pagination" style="margin-top: 20px">
   <ul class="pagination" style="float: right">
+    <li class="page-item" *ngIf="PaginationFirst">
+      <a class="page-link" href="javascript: void(0)" aria-label="Next" (click)="rePage(PaginationFirst)">{{ PaginationFirst }}...</a>
+    </li>
     <li class="page-item" *ngIf="PaginationPrevious">
       <a class="page-link" href="javascript: void(0)" aria-label="Previous" (click)="rePage(PaginationPrevious)">
         <span aria-hidden="true">&laquo;</span>
@@ -68,6 +71,9 @@
         <span aria-hidden="true">&raquo;</span>
         <span class="sr-only">Следующий</span>
       </a>
+    </li>
+    <li class="page-item" *ngIf="PaginationLast">
+      <a class="page-link" href="javascript: void(0)" aria-label="Next" (click)="rePage(PaginationLast)">...{{ PaginationLast }}</a>
     </li>
   </ul>
 </div>

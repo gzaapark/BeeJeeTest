@@ -34,10 +34,11 @@ export class TaskService {
     const params = this.queryParams([
       { key: 'page', value: page ? String(page) : undefined },
       { key: 'sort_field', value: sort_field },
-      { key: 'sort_direction=', value: sort_direction }
+      { key: 'sort_direction', value: sort_direction }
     ]);
 
-    return this.http.get<TaskServiceResponse>(this.state.BaseUrl + params, this.httpOptions);
+    const url = this.state.BaseUrl + params;
+    return this.http.get<TaskServiceResponse>(url, this.httpOptions);
   }
 
   Login(login, password): Observable<TaskServiceResponse> {
