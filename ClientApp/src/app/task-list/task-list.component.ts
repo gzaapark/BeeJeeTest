@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { StateService } from '../services/state.service';
@@ -29,7 +30,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _auth: AuthService,
     private _state: StateService,
-    private _router: Router
+    private _router: Router,
+    private _toastr: ToastrService
   )
   {
     this.IsAuthoRized = _auth.isAuthorized();
@@ -37,11 +39,11 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this._state.CreatedTaskId) {
-      this.Error = 'Создана задача с id=' + this._state.CreatedTaskId;
+      this._toastr.success('Выполнено!', 'Создана задача с id=' + this._state.CreatedTaskId);
       this._state.CreatedTaskId = undefined;
     }
     if (this._state.UpdatedTaskId) {
-      this.Error = 'Отредактирована задача с id=' + this._state.UpdatedTaskId;
+      this._toastr.success('Выполнено!', 'Отредактирована задача с id=' + this._state.UpdatedTaskId);
       this._state.UpdatedTaskId = undefined;
     }
     this._sub = this._route.params.subscribe(params => {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StateService } from '../services/state.service';
 import { TaskService } from '../services/task.service';
@@ -28,7 +28,7 @@ export class TaskAddComponent implements OnInit {
       ],
       email: [
         undefined,
-        [Validators.required]
+        [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]
       ],
       username: [
         undefined,
@@ -38,9 +38,12 @@ export class TaskAddComponent implements OnInit {
   }
 
   isControlInvalid(controlName: string): boolean {
-    const control = this.TaskForm.controls[controlName];
-    const result = control.invalid && control.touched;
-    return result;
+    const control = this.getControl(controlName);
+    return control.invalid && control.touched;
+  }
+
+  getControl(controlName: string): AbstractControl {
+    return this.TaskForm.controls[controlName];
   }
 
   cancel() {

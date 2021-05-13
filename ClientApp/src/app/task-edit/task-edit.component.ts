@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { StateService } from '../services/state.service';
 import { TaskService } from '../services/task.service';
 
@@ -24,8 +23,8 @@ export class TaskEditComponent implements OnInit {
 
   ngOnInit() {
     const editableTask = this._state.GetTaskEditState();
-    const id = editableTask ? editableTask.id : undefined;
-    const text = editableTask ? editableTask.text : undefined;
+    const id = editableTask ? editableTask.id : null;
+    const text = editableTask ? editableTask.text : null;
     const executed = editableTask && (editableTask.status === 10 || editableTask.status === 11);
     this.TaskForm = this.fb.group({
       id: [
@@ -51,45 +50,72 @@ export class TaskEditComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  onSubmit() {
-    const controls = this.TaskForm.controls;
-    const editableTask = this._state.GetTaskEditState();
+  private updatedTask(t) {
+    if(t) this._state.UpdatedTaskId = t.id;
+    this._state.SetTaskEditState(undefined);
+    this.router.navigate(['/']);
+  }
 
-    if (this.TaskForm.invalid) {
-      Object.keys(controls)
-        .forEach(controlName => controls[controlName].markAsTouched());
-      return;
+  private nextStatus(wasChanged, wasExecuted, status) {
+    if (!wasChanged && !wasExecuted) {
+      if (status == 10)
+        return 0;
+      else if (status == 11)
+        return 1;
+      else
+        return status;
     }
+    else if (!wasChanged && wasExecuted) {
+      if (status == 0)
+        return 10;
+      else if (status == 1)
+        return 11;
+      else
+        return status;
+    }
+    else if (wasChanged && !wasExecuted) {
+      return 1;
+    }
+    else if (wasChanged && wasExecuted) {
+      return 11;
+    }
+    return status;
+  }
 
-    const wasChanged = controls['text'].dirty;
-    const wasExecuted = controls['executed'].value;
+  onSubmit() {
+    if (this.TaskForm.dirty) {
+      const controls = this.TaskForm.controls;
+      const editableTask = this._state.GetTaskEditState();
 
-    var status = editableTask.status;
-    if (wasChanged && wasExecuted)
-      status = '11';
-    else if (wasExecuted)
-      status = Math.max(10, status) + '';
-    else if (wasChanged)
-      status = '1';
-    else
-      status = '0';
-
-    return this._taskService.EditTask(
-      controls['id'].value,
-      controls['text'].value,
-      status
-    ).subscribe(
-      data => {
-        if (data.status === 'ok') {
-          this._state.UpdatedTaskId = editableTask.id;
-          this._state.SetTaskEditState(undefined);
-          this.router.navigate(['/']);
-        }
-        else this.Error = data.message;
-      },
-      error => {
-        this.Error = error;
+      if (this.TaskForm.invalid) {
+        Object.keys(controls)
+          .forEach(controlName => controls[controlName].markAsTouched());
+        return;
       }
-    );
+
+      const wasChanged = controls['text'].dirty;
+      const wasExecuted = controls['executed'].value;
+
+      const status = this.nextStatus(wasChanged, wasExecuted, editableTask.status);
+
+      return this._taskService.EditTask(
+        controls['id'].value,
+        controls['text'].value,
+        status
+      ).subscribe(
+        data => {
+          if (data.status === 'ok')
+            this.updatedTask(editableTask);
+          else
+            this.Error = data.message;
+        },
+        error => {
+          this.Error = error;
+        }
+      );
+    }
+    else {
+      this.updatedTask(undefined);
+    }
   }
 }

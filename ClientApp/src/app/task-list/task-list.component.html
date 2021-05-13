@@ -6,32 +6,16 @@
     <thead>
       <tr>
         <th width="20%">
-          <div style="float: left">Id</div>
-          <div style="float: right">
-            <button class="btn btn-sm" (click)="fieldSort('id', 'asc')" *ngIf="fieldShow('id', 'asc')">&#9650;</button>
-            <button class="btn btn-sm" (click)="fieldSort('id', 'desc')" *ngIf="fieldShow('id', 'desc')">&#9660;</button>
-          </div>
+          <ng-template *ngTemplateOutlet="tplArrows; context: {$implicit: { id: 'id', name: 'ID' }}"></ng-template>
         </th>
         <th width="20%">
-          <div style="float: left">Пользователь</div>
-          <div style="float: right">
-            <button class="btn btn-sm" (click)="fieldSort('username', 'asc')" *ngIf="fieldShow('username', 'asc')">&#9650;</button>
-            <button class="btn btn-sm" (click)="fieldSort('username', 'desc')" *ngIf="fieldShow('username', 'desc')">&#9660;</button>
-          </div>
+          <ng-template *ngTemplateOutlet="tplArrows; context: {$implicit: { id: 'username', name: 'Пользователь' }}"></ng-template>
         </th>
         <th width="20%">
-          <div style="float: left">Email</div>
-          <div style="float: right">
-            <button class="btn btn-sm" (click)="fieldSort('email', 'asc')" *ngIf="fieldShow('email', 'asc')">&#9650;</button>
-            <button class="btn btn-sm" (click)="fieldSort('email', 'desc')" *ngIf="fieldShow('email', 'desc')">&#9660;</button>
-          </div>
+          <ng-template *ngTemplateOutlet="tplArrows; context: {$implicit: { id: 'email', name: 'E-mail' }}"></ng-template>
         </th>
         <th width="20%">
-          <div style="float: left">Статус</div>
-          <div style="float: right">
-            <button class="btn btn-sm" (click)="fieldSort('status', 'asc')" *ngIf="fieldShow('status', 'asc')">&#9650;</button>
-            <button class="btn btn-sm" (click)="fieldSort('status', 'desc')" *ngIf="fieldShow('status', 'desc')">&#9660;</button>
-          </div>
+          <ng-template *ngTemplateOutlet="tplArrows; context: {$implicit: { id: 'status', name: 'Статус' }}"></ng-template>
         </th>
         <th width="19%">Текст</th>
         <th width="1%" *ngIf="IsAuthoRized"></th>
@@ -77,3 +61,11 @@
     </li>
   </ul>
 </div>
+<ng-template #tplArrows let-field>
+  <div class="float-left">{{ field.name }}</div>
+  <div class="float-right">
+    <a href="javascript: void(0)" class="text-dark" (click)="fieldSort(field.id, 'asc')" *ngIf="fieldShow(field.id, 'asc')">&#9650;</a>
+    <a href="javascript: void(0)" class="text-dark" (click)="fieldSort(field.id, 'desc')" *ngIf="fieldShow(field.id, 'desc')">&#9660;</a>
+  </div>
+</ng-template>
+

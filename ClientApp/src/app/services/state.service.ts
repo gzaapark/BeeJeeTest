@@ -10,7 +10,6 @@ export class StateService {
   CreatedTaskId: number;
   UpdatedTaskId: number;
 
-
   private editableTask: any;
   SetTaskEditState(editableTask: any) {
     this.editableTask = editableTask;
